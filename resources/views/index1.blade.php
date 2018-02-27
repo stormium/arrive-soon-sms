@@ -13,39 +13,13 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-  <script>
-  $( function() {
-    var availableTags = [
-      "ActionScript",
-      "AppleScript",
-      "Asp",
-      "BASIC",
-      "C",
-      "C++",
-      "Clojure",
-      "COBOL",
-      "ColdFusion",
-      "Erlang",
-      "Fortran",
-      "Groovy",
-      "Haskell",
-      "Java",
-      "JavaScript",
-      "Lisp",
-      "Perl",
-      "PHP",
-      "Python",
-      "Ruby",
-      "Scala",
-      "Scheme"
-    ];
-    $( "#stop" ).autocomplete({
-      source: availableTags
-    });
-  } );
-  </script>
+  <script type="text/javascript" src="{{ URL::to('js/autofill.js') }}"></script>
+
 
 <body class="w3-light-grey">
+  <div class="info" id="info">
+
+  </div>
 
 <!-- Top container -->
 <div class="w3-bar w3-top w3-black w3-large" style="z-index:4">
@@ -98,9 +72,14 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
   <label class="w3-text-teal"><b>Search Stop</b></label>
   <input class="w3-input w3-border w3-light-grey w3-animate-input" type="text" style="width:30%" id="stop">
 
-  <label class="w3-text-teal"><b>Last Name</b></label>
-  <input class="w3-input w3-border w3-light-grey w3-animate-input" type="text" style="width:30%">
-
+  <label for="direction" class="w3-text-teal"><b>Direction</b></label><br>
+  <select class="w3-select w3-border w3-light-grey w3-animate-input" name="direction" id="direction" style="width:30%">
+    <option value="" disabled selected>Direction</option>
+    <option value="1">Option 1</option>
+    <option value="2">Option 2</option>
+    <option value="3">Option 3</option>
+  </select>
+  <br>
   <button class="w3-btn w3-blue-grey">Register</button>
 </form>
 
