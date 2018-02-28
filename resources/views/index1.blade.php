@@ -74,10 +74,14 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
 
   <label for="direction" class="w3-text-teal"><b>Direction</b></label><br>
   <select class="w3-select w3-border w3-light-grey w3-animate-input" name="direction" id="direction" style="width:30%">
-    <option value="" disabled selected>Direction</option>
-    <option value="1">Option 1</option>
-    <option value="2">Option 2</option>
-    <option value="3">Option 3</option>
+  </select>
+  <br>
+  <label for="schedules" class="w3-text-teal"><b>Schedules</b></label><br>
+  <select class="w3-select w3-border w3-light-grey w3-animate-input" name="schedules" id="schedules" style="width:30%">
+  </select>
+  <br>
+  <label for="departures" class="w3-text-teal"><b>Departures</b></label><br>
+  <select class="w3-select w3-border w3-light-grey w3-animate-input" name="departures" id="departures" style="width:30%">
   </select>
   <br>
   <button class="w3-btn w3-blue-grey">Register</button>
