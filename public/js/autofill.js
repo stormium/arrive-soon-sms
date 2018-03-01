@@ -6,12 +6,14 @@ var selectedStopName;
 var selectedStopId;
 var stopCoords = {};
 
+var directionsArray = [];
+
 $( function searchStop() {
-  $( "#stop" ).autocomplete({
+  $( "#search" ).autocomplete({
 
     source: function( request, response ) {
       $.ajax( {
-        url: 'http://api-ext.trafi.com/locations?region=vilnius&api_key=sandbox_key_not_for_production',
+        url: 'http://api-ext.trafi.com/locations?region=vilnius&api_key=4194f417c45ce354aa7994dcd6594cc7',
         dataType: 'json',
         data: {
            q: request.term
@@ -32,17 +34,28 @@ $( function searchStop() {
     },
     minLength: 3,
     select: function( event, ui ) {
-      $('#direction').find('option').remove();
+      $('#stop').find('option').remove();
 
       selectedStopIndex = jQuery.inArray( ui.item.value, namesArray );
       selectedStopName = ui.item.value;
       stopCoords = stops[selectedStopIndex].Coordinate;
       console.log( "Selected: " + ui.item.value + " aka " + selectedStopIndex);
-      getDirectionOptions();
-      $('#direction').on('change', function()
+      $("#stop").append('<option value="">Select Stop according direction</option>');
+      getStopsOptions();
+
+      $('#stop').on('change', function()
       {
+          $('#departures').find('option').remove();
           selectedStopId = this.value;
-          getSchedulesOptions(selectedStopId);
+          getDirectionOptions(selectedStopId);
+          generateDeparturesOptions(0);
+      });
+
+      $('#directions').on('change', function()
+      {
+          $('#departures').find('option').remove();
+          var selectedDirectionIndex = $('#directions').prop('selectedIndex');
+          generateDeparturesOptions(selectedDirectionIndex);
       });
 
       }
@@ -53,11 +66,9 @@ $( function searchStop() {
 
 );
 
-
-
-function getDirectionOptions() {
+function getStopsOptions() {
   $.ajax( {
-    url: 'http://api-ext.trafi.com/stops/nearby?api_key=sandbox_key_not_for_production',
+    url: 'http://api-ext.trafi.com/stops/nearby?api_key=4194f417c45ce354aa7994dcd6594cc7',
     dataType: 'json',
     data: {
        lat: stopCoords.Lat,
@@ -66,12 +77,12 @@ function getDirectionOptions() {
     },
     success: function( data ) {
       console.log(data);
-      directionsArray = [];
+
         for (var i = 0; i < data.Stops.length; i++) {
 
           if (data.Stops[i].Name == selectedStopName && data.Stops[i].Direction != '') {
               console.log(data.Stops[i].Name);
-              $("#direction").append('<option value=' + data.Stops[i].Id + '>' + data.Stops[i].Direction + '</option>');
+              $("#stop").append('<option value=' + data.Stops[i].Id + '>' + data.Stops[i].Direction + '</option>');
           }
 
         }
@@ -83,21 +94,22 @@ function getDirectionOptions() {
   } );
 }
 
-function getSchedulesOptions(selectedStopId) {
+function getDirectionOptions(selectedStopId) {
   $.ajax( {
-    url: 'http://api-ext.trafi.com/departures?api_key=sandbox_key_not_for_production',
+    url: 'http://api-ext.trafi.com/departures?api_key=4194f417c45ce354aa7994dcd6594cc7',
     dataType: 'json',
     data: {
        stop_id: selectedStopId,
        region: 'vilnius'
     },
     success: function( data ) {
-      console.log(data);
-      $('#schedules').find('option').remove();
+      //console.log(data);
+      directionsArray = data.Schedules;
+      $('#directions').find('option').remove();
       for (var i = 0; i < data.Schedules.length; i++) {
 
-          console.log(data.Schedules[i].Name);
-          $("#schedules").append('<option value=' + data.Schedules[i].ScheduleId + '>' + data.Schedules[i].Name + ' ' + data.Schedules[i].Destination + '</option>');
+          //console.log(data.Schedules[i].Name);
+          $("#directions").append('<option value=' + data.Schedules[i].ScheduleId + '>' + data.Schedules[i].Name + ' ' + data.Schedules[i].Destination + '</option>');
       }
 
     },
@@ -107,11 +119,35 @@ function getSchedulesOptions(selectedStopId) {
   } );
 }
 
-function generateDeparturesOptions() {
+function generateDeparturesOptions(selectedDirectionIndex) {
   $('#departures').find('option').remove();
-  for (var i = 0; i < data.Schedules.length; i++) {
 
-      console.log(data.Schedules[i].Name);
-      $("#schedules").append('<option value=' + data.Schedules[i].ScheduleId + '>' + data.Schedules[i].Name + ' ' + data.Schedules[i].Destination + '</option>');
-  }
+
+  var scheduleId = directionsArray[selectedDirectionIndex].ScheduleId;
+  var trackId = directionsArray[selectedDirectionIndex].TrackId;
+
+  $.ajax( {
+    url: 'https://www.trafi.com/api/times/vilnius/scheduled',
+    dataType: 'json',
+    data: {
+       scheduleId: scheduleId,
+       trackId: trackId,
+       stopId: selectedStopId
+    },
+    success: function( data ) {
+      // console.log(data);
+      // directionsArray = data.Schedules;
+      // $('#departures').find('option').remove();
+      // for (var i = 0; i < departuresArray.length; i++) {
+      //
+      //     $("#departures").append('<option value=' + departuresArray[i].TimeUtc + '>' + departuresArray[i].TimeLocal + '</option>');
+      // }
+
+    },
+    error: function() {
+      console.log('An error has occurred');
+    },
+  } );
+
+
 }

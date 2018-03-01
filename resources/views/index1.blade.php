@@ -70,14 +70,14 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
 
 <form class="w3-container">
   <label class="w3-text-teal"><b>Search Stop</b></label>
-  <input class="w3-input w3-border w3-light-grey w3-animate-input" type="text" style="width:30%" id="stop">
+  <input class="w3-input w3-border w3-light-grey w3-animate-input" type="text" style="width:30%" id="search">
 
-  <label for="direction" class="w3-text-teal"><b>Direction</b></label><br>
-  <select class="w3-select w3-border w3-light-grey w3-animate-input" name="direction" id="direction" style="width:30%">
+  <label for="stop" class="w3-text-teal"><b>Stop</b></label><br>
+  <select class="w3-select w3-border w3-light-grey w3-animate-input" name="stop" id="stop" style="width:30%">
   </select>
   <br>
-  <label for="schedules" class="w3-text-teal"><b>Schedules</b></label><br>
-  <select class="w3-select w3-border w3-light-grey w3-animate-input" name="schedules" id="schedules" style="width:30%">
+  <label for="directions" class="w3-text-teal"><b>Direction</b></label><br>
+  <select class="w3-select w3-border w3-light-grey w3-animate-input" name="directions" id="directions" style="width:30%">
   </select>
   <br>
   <label for="departures" class="w3-text-teal"><b>Departures</b></label><br>
