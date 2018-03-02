@@ -126,16 +126,21 @@ function generateDeparturesOptions(selectedDirectionIndex) {
   var scheduleId = directionsArray[selectedDirectionIndex].ScheduleId;
   var trackId = directionsArray[selectedDirectionIndex].TrackId;
 
+  var url= 'https://www.trafi.com/api/times/vilnius/scheduled?scheduleId=' +  scheduleId + '&trackId=' + trackId + '&stopId=' + selectedStopId;
+  url = 'proxy.php?url='+url;
+  console.log(url);
   $.ajax( {
-    url: 'https://www.trafi.com/api/times/vilnius/scheduled',
+    type : "GET",
+    url: url,
     dataType: 'json',
-    data: {
-       scheduleId: scheduleId,
-       trackId: trackId,
-       stopId: selectedStopId
-    },
+    // data: {
+    //    scheduleId: scheduleId,
+    //    trackId: trackId,
+    //    stopId: selectedStopId
+    // },
     success: function( data ) {
-      // console.log(data);
+
+      console.log(data);
       // directionsArray = data.Schedules;
       // $('#departures').find('option').remove();
       // for (var i = 0; i < departuresArray.length; i++) {
@@ -151,3 +156,15 @@ function generateDeparturesOptions(selectedDirectionIndex) {
 
 
 }
+
+// var bbz = fetch('https://www.trafi.com/api/times/vilnius/scheduled?scheduleId=vln_bus_75&trackId=a-b&stopId=vln_3218&api_key=4194f417c45ce354aa7994dcd6594cc7', {mode: 'no-cors'})
+//   .then(
+//     function(response) {
+//       console.log(response);
+//       response.json().then(function(data) {
+//         console.log(data);
+//       });
+//     })
+//   .catch(function(err) {
+//     console.log(err);
+//   })
