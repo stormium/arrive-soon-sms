@@ -1,5 +1,5 @@
 <?php
-
+use Illuminate\Support\Facades\Input;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -16,8 +16,11 @@ Route::get('/', function () {
 });
 
 Route::get('/proxy.php', function () {
-    header('Content-type: application/json');
-    $url=$_GET['url'];
-    $json=file_get_contents($url);
+    header('Content-type: application/json; charset=utf-8');
+    $url=Input::get('url');
+    $trackId=Input::get('trackId');
+    $selectedStopId=Input::get('stopId');
+    $fullUrl=$url . "&trackId=" . $trackId . "&stopId=" . $selectedStopId;
+    $json=file_get_contents($fullUrl);
     echo $json;
 });

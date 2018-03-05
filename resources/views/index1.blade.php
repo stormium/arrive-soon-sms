@@ -13,7 +13,6 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/fetch-jsonp/1.0.6/fetch-jsonp.min.js"></script>
   <script type="text/javascript" src="{{ URL::to('js/autofill.js') }}"></script>
 
 
@@ -84,6 +83,17 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
   <label for="departures" class="w3-text-teal"><b>Departures</b></label><br>
   <select class="w3-select w3-border w3-light-grey w3-animate-input" name="departures" id="departures" style="width:30%">
   </select>
+  <br>
+  <input class="w3-radio" type="radio" name="departuresDayOption" value="0" checked>
+  <label>Today</label>
+
+  <input class="w3-radio" type="radio" name="departuresDayOption" value="1">
+  <label>Workday</label>
+
+  <input class="w3-radio" type="radio" name="departuresDayOption" value="2">
+  <label>Saturday</label>
+  <input class="w3-radio" type="radio" name="departuresDayOption" value="3">
+  <label>Sunday</label>
   <br>
   <button class="w3-btn w3-blue-grey">Register</button>
 </form>

@@ -7,6 +7,8 @@ var selectedStopId;
 var stopCoords = {};
 
 var directionsArray = [];
+var selectedDirectionIndex;
+var departuresFulldata = {};
 
 $( function searchStop() {
   $( "#search" ).autocomplete({
@@ -35,6 +37,7 @@ $( function searchStop() {
     minLength: 3,
     select: function( event, ui ) {
       $('#stop').find('option').remove();
+      $('.w3-radio').prop('disabled', true);
 
       selectedStopIndex = jQuery.inArray( ui.item.value, namesArray );
       selectedStopName = ui.item.value;
@@ -43,19 +46,32 @@ $( function searchStop() {
       $("#stop").append('<option value="">Select Stop according direction</option>');
       getStopsOptions();
 
+      // if ($('#departures option').length == 0) {
+      //     console.log('byb');
+      //     $('.w3-radio').prop('disabled', true);
+      // }
+
       $('#stop').on('change', function()
       {
           $('#departures').find('option').remove();
+          $('.w3-radio').prop('disabled', true);
           selectedStopId = this.value;
           getDirectionOptions(selectedStopId);
-          generateDeparturesOptions(0);
+          generateDeparturesOptions(0, 0);
       });
 
       $('#directions').on('change', function()
       {
           $('#departures').find('option').remove();
-          var selectedDirectionIndex = $('#directions').prop('selectedIndex');
-          generateDeparturesOptions(selectedDirectionIndex);
+          $('.w3-radio').prop('disabled', false);
+          selectedDirectionIndex = $('#directions').prop('selectedIndex');
+          generateDeparturesOptions(selectedDirectionIndex, 0);
+      });
+
+      $('.w3-radio').on('change', function()
+      {
+          var selectedWorkdayOptionValue = $('.w3-radio:checked').val();
+          generateDeparturesOptions(selectedDirectionIndex, selectedWorkdayOptionValue);
       });
 
       }
@@ -119,52 +135,45 @@ function getDirectionOptions(selectedStopId) {
   } );
 }
 
-function generateDeparturesOptions(selectedDirectionIndex) {
+function generateDeparturesOptions(selectedDirectionIndex, weekDay) {
   $('#departures').find('option').remove();
 
+    if (!$.isEmptyObject(departuresFulldata)) {
+      console.log(departuresFulldata);
+    departuresArray = departuresFulldata.scheduled.days[weekDay].scheduledTimes;
+    $('#departures').find('option').remove();
+    for (var i = 0; i < departuresArray.length; i++) {
 
-  var scheduleId = directionsArray[selectedDirectionIndex].ScheduleId;
-  var trackId = directionsArray[selectedDirectionIndex].TrackId;
+        $("#departures").append('<option value=' + departuresArray[weekDay].exactTime + '>' + departuresArray[weekDay].exactTime + '</option>');
+    }
+    } else {
+      var scheduleId = directionsArray[selectedDirectionIndex].ScheduleId;
+      var trackId = directionsArray[selectedDirectionIndex].TrackId;
 
-  var url= 'https://www.trafi.com/api/times/vilnius/scheduled?scheduleId=' +  scheduleId + '&trackId=' + trackId + '&stopId=' + selectedStopId;
-  url = 'proxy.php?url='+url;
-  console.log(url);
-  $.ajax( {
-    type : "GET",
-    url: url,
-    dataType: 'json',
-    // data: {
-    //    scheduleId: scheduleId,
-    //    trackId: trackId,
-    //    stopId: selectedStopId
-    // },
-    success: function( data ) {
+      var url= 'https://www.trafi.com/api/times/vilnius/scheduled?scheduleId=' +  scheduleId + '&trackId=' + trackId + '&stopId=' + selectedStopId;
+      url = 'proxy.php?url='+url;
 
-      console.log(data);
-      // directionsArray = data.Schedules;
-      // $('#departures').find('option').remove();
-      // for (var i = 0; i < departuresArray.length; i++) {
-      //
-      //     $("#departures").append('<option value=' + departuresArray[i].TimeUtc + '>' + departuresArray[i].TimeLocal + '</option>');
-      // }
+      $.ajax( {
+        type : "GET",
+        url: url,
+        dataType: 'json',
+        success: function( data ) {
+          departuresFulldata = data;
+          departuresArray = departuresFulldata.scheduled.days[weekDay].scheduledTimes;
+          console.log(departuresArray);
+          $('#departures').find('option').remove();
+          for (var i = 0; i < departuresArray.length; i++) {
 
-    },
-    error: function() {
-      console.log('An error has occurred');
-    },
-  } );
+              $("#departures").append('<option value=' + departuresArray[weekDay].exactTime + '>' + departuresArray[weekDay].exactTime + '</option>');
+          }
+
+        },
+        error: function() {
+          console.log('An error has occurred');
+        },
+      } );
+    }
+
 
 
 }
-
-// var bbz = fetch('https://www.trafi.com/api/times/vilnius/scheduled?scheduleId=vln_bus_75&trackId=a-b&stopId=vln_3218&api_key=4194f417c45ce354aa7994dcd6594cc7', {mode: 'no-cors'})
-//   .then(
-//     function(response) {
-//       console.log(response);
-//       response.json().then(function(data) {
-//         console.log(data);
-//       });
-//     })
-//   .catch(function(err) {
-//     console.log(err);
-//   })
