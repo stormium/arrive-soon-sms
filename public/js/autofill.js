@@ -37,6 +37,10 @@ $( function searchStop() {
     minLength: 3,
     select: function( event, ui ) {
       $('#stop').find('option').remove();
+      $('#departures').find('option').remove();
+      $('#directions').find('option').remove();
+
+      $('input[name=departuresDayOption][value="0"]').prop('checked', true);
       $('.w3-radio').prop('disabled', true);
 
       selectedStopIndex = jQuery.inArray( ui.item.value, namesArray );
@@ -46,37 +50,35 @@ $( function searchStop() {
       $("#stop").append('<option value="">Select Stop according direction</option>');
       getStopsOptions();
 
-      // if ($('#departures option').length == 0) {
-      //     console.log('byb');
-      //     $('.w3-radio').prop('disabled', true);
-      // }
-
       $('#stop').on('change', function()
       {
           $('#departures').find('option').remove();
+          $('#directions').find('option').remove();
+          $('input[name=departuresDayOption][value="0"]').prop('checked', true);
           $('.w3-radio').prop('disabled', true);
           selectedStopId = this.value;
+          $("#directions").append('<option value="">Select Direction</option>');
           getDirectionOptions(selectedStopId);
-          generateDeparturesOptions(0, 0);
       });
 
       $('#directions').on('change', function()
       {
           $('#departures').find('option').remove();
+          $('input[name=departuresDayOption][value="0"]').prop('checked', true);
           $('.w3-radio').prop('disabled', false);
           selectedDirectionIndex = $('#directions').prop('selectedIndex');
+          selectedDirectionIndex--;
+          console.log(selectedDirectionIndex);
           generateDeparturesOptions(selectedDirectionIndex, 0);
       });
 
       $('.w3-radio').on('change', function()
       {
           var selectedWorkdayOptionValue = $('.w3-radio:checked').val();
-          generateDeparturesOptions(selectedDirectionIndex, selectedWorkdayOptionValue);
+          updateDeparturesOptionsWeekdayChanged(selectedWorkdayOptionValue);
       });
 
       }
-
-
   });
 }
 
@@ -92,17 +94,12 @@ function getStopsOptions() {
        radius: 200
     },
     success: function( data ) {
-      console.log(data);
-
         for (var i = 0; i < data.Stops.length; i++) {
 
           if (data.Stops[i].Name == selectedStopName && data.Stops[i].Direction != '') {
-              console.log(data.Stops[i].Name);
               $("#stop").append('<option value=' + data.Stops[i].Id + '>' + data.Stops[i].Direction + '</option>');
           }
-
         }
-
     },
     error: function() {
       console.log('An error has occurred');
@@ -119,15 +116,13 @@ function getDirectionOptions(selectedStopId) {
        region: 'vilnius'
     },
     success: function( data ) {
-      //console.log(data);
+
       directionsArray = data.Schedules;
-      $('#directions').find('option').remove();
+      console.log(directionsArray);
       for (var i = 0; i < data.Schedules.length; i++) {
 
-          //console.log(data.Schedules[i].Name);
           $("#directions").append('<option value=' + data.Schedules[i].ScheduleId + '>' + data.Schedules[i].Name + ' ' + data.Schedules[i].Destination + '</option>');
       }
-
     },
     error: function() {
       console.log('An error has occurred');
@@ -138,42 +133,37 @@ function getDirectionOptions(selectedStopId) {
 function generateDeparturesOptions(selectedDirectionIndex, weekDay) {
   $('#departures').find('option').remove();
 
-    if (!$.isEmptyObject(departuresFulldata)) {
-      console.log(departuresFulldata);
-    departuresArray = departuresFulldata.scheduled.days[weekDay].scheduledTimes;
-    $('#departures').find('option').remove();
-    for (var i = 0; i < departuresArray.length; i++) {
+    var scheduleId = directionsArray[selectedDirectionIndex].ScheduleId;
+    var trackId = directionsArray[selectedDirectionIndex].TrackId;
 
-        $("#departures").append('<option value=' + departuresArray[weekDay].exactTime + '>' + departuresArray[weekDay].exactTime + '</option>');
-    }
-    } else {
-      var scheduleId = directionsArray[selectedDirectionIndex].ScheduleId;
-      var trackId = directionsArray[selectedDirectionIndex].TrackId;
+    var url= 'https://www.trafi.com/api/times/vilnius/scheduled?scheduleId=' +  scheduleId + '&trackId=' + trackId + '&stopId=' + selectedStopId;
+    url = 'proxy.php?url='+url;
 
-      var url= 'https://www.trafi.com/api/times/vilnius/scheduled?scheduleId=' +  scheduleId + '&trackId=' + trackId + '&stopId=' + selectedStopId;
-      url = 'proxy.php?url='+url;
+    $.ajax( {
+      type : "GET",
+      url: url,
+      dataType: 'json',
+      success: function( data ) {
+        departuresFulldata = data;
+        departuresArray = departuresFulldata.scheduled.days[weekDay].scheduledTimes;
+        $('#departures').find('option').remove();weekDay
+        for (var i = 0; i < departuresArray.length; i++) {
 
-      $.ajax( {
-        type : "GET",
-        url: url,
-        dataType: 'json',
-        success: function( data ) {
-          departuresFulldata = data;
-          departuresArray = departuresFulldata.scheduled.days[weekDay].scheduledTimes;
-          console.log(departuresArray);
-          $('#departures').find('option').remove();
-          for (var i = 0; i < departuresArray.length; i++) {
-
-              $("#departures").append('<option value=' + departuresArray[weekDay].exactTime + '>' + departuresArray[weekDay].exactTime + '</option>');
-          }
-
-        },
-        error: function() {
-          console.log('An error has occurred');
-        },
-      } );
+            $("#departures").append('<option value=' + departuresArray[i].exactTime + '>' + departuresArray[i].exactTime + '</option>');
+        }
+      },
+      error: function() {
+        console.log('An error has occurred');
+      },
+    } );
     }
 
 
+function updateDeparturesOptionsWeekdayChanged(weekDay) {
+  $('#departures').find('option').remove();
+  departuresArray = departuresFulldata.scheduled.days[weekDay].scheduledTimes;
+  for (var i = 0; i < departuresArray.length; i++) {
 
+      $("#departures").append('<option value=' + departuresArray[i].exactTime + '>' + departuresArray[i].exactTime + '</option>');
+  }
 }

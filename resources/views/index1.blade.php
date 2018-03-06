@@ -68,7 +68,8 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
   <!-- Header -->
 
 
-<form class="w3-container">
+<form class="w3-container w3-card-4" novalidate method="POST" action="{{ route('rule_store') }}">
+  {{ csrf_field() }}
   <label class="w3-text-teal"><b>Search Stop</b></label>
   <input class="w3-input w3-border w3-light-grey w3-animate-input" type="text" style="width:30%" id="search">
 
@@ -83,19 +84,31 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
   <label for="departures" class="w3-text-teal"><b>Departures</b></label><br>
   <select class="w3-select w3-border w3-light-grey w3-animate-input" name="departures" id="departures" style="width:30%">
   </select>
-  <br>
+  <p>
   <input class="w3-radio" type="radio" name="departuresDayOption" value="0" checked>
-  <label>Today</label>
-
+  <label>Today</label></p>
+  <p>
   <input class="w3-radio" type="radio" name="departuresDayOption" value="1">
-  <label>Workday</label>
-
+  <label>Workday</label></p>
+  <p>
   <input class="w3-radio" type="radio" name="departuresDayOption" value="2">
-  <label>Saturday</label>
+  <label>Saturday</label></p>
+  <p>
   <input class="w3-radio" type="radio" name="departuresDayOption" value="3">
-  <label>Sunday</label>
+  <label>Sunday</label></p>
+  <label for="offset" class="w3-text-teal"><b>Generate SMS before:</b></label><br>
+  <select class="w3-select w3-border w3-light-grey w3-animate-input" name="offset" id="offset" style="width:30%">
+    <option value="5">5 min</option>
+    <option value="6">6 min</option>
+    <option value="7">7 min</option>
+    <option value="8">8 min</option>
+    <option value="9">9 min</option>
+    <option value="10">10 min</option>
+    <option value="15">15 min</option>
+    <option value="20">20 min</option>
+  </select>
   <br>
-  <button class="w3-btn w3-blue-grey">Register</button>
+  <button type="submit" class="w3-btn w3-blue-grey">Register</button>
 </form>
 
   <hr>

@@ -24,3 +24,5 @@ Route::get('/proxy.php', function () {
     $json=file_get_contents($fullUrl);
     echo $json;
 });
+
+Route::post('/add_rule', 'EventRuleController@store')->name('rule_store');
