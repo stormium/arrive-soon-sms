@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\EventRule;
+
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
@@ -15,7 +16,17 @@ class EventRuleController extends Controller
      */
     public function index()
     {
-        //
+        $now = Carbon::createFromFormat('H:i', '18:24')->toTimeString();
+        var_dump($now);
+        $rules = EventRule::where('notification_at', $now)->get();
+
+        $notificationsArray = [];
+        foreach ($rules as $rule) {
+          $notification = $rule->notifications;
+          dump($notification);
+          $notificationsArray[] = $notification;
+        }
+
     }
 
     /**
@@ -36,22 +47,23 @@ class EventRuleController extends Controller
      */
     public function store(Request $request)
     {
+      $userTimeZone = 'Europe/Vilnius';
 
       $weekday = $request->get('departuresDayOption');
 
       $offset = $request->get('offset');
 
+      $departureAtString = $request->get('departures');
 
-      $departureAt = $request->get('departures');
+      $departureAt = Carbon::createFromFormat('H:i', $departureAtString, $userTimeZone)->setTimezone('UTC')->toTimeString();
 
-      $time = Carbon::createFromFormat('H:i', $departureAt)->toTimeString();
+      $notificationAt = Carbon::createFromFormat('H:i', $departureAtString, $userTimeZone)->setTimezone('UTC')->subMinutes($offset+5)->toTimeString();
 
-      $notificationAt = $time->subMinutes($offset);
-      dd($notificationAt);
+      //$notificationAt = $time->subMinutes($offset);
       $post = [
         'stop' => $request->get('stop'),
         'direction' => $request->get('directions'),
-        'departure_at' => $request->get('departures'),
+        'departure_at' => $departureAt,
         'weekday' => $request->get('departuresDayOption'),
         'notification_at' => $notificationAt
       ];
@@ -105,6 +117,17 @@ class EventRuleController extends Controller
     {
         //
     }
+
+
+
+    // public function generateNotifications(Array cronResponse) {
+    //   foreach ($cronResponse as $item) {
+    //     if (condition) {
+    //       # code...
+    //     }
+    //   }
+    //
+    // }
 
     // protected function validator($data)
     // {

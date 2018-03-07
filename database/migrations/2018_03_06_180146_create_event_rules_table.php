@@ -19,7 +19,7 @@ class CreateEventRulesTable extends Migration
             $table->string('direction');
             $table->time('departure_at');
             $table->integer('weekday');
-            $table->string('notification_at');
+            $table->time('notification_at');
             $table->integer('user_id')->nullable()->unsigned();
             $table->timestamps();
         });

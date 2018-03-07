@@ -26,3 +26,4 @@ Route::get('/proxy.php', function () {
 });
 
 Route::post('/add_rule', 'EventRuleController@store')->name('rule_store');
+Route::get('/index', 'EventRuleController@index')->name('rule_index');

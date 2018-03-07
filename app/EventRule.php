@@ -13,4 +13,9 @@ class EventRule extends Model
     'weekday',
     'notification_at'
   ];
+
+  public function notifications()
+  {
+    return $this->hasMany('App\Notification', 'event_rule_id');
+  }
 }
