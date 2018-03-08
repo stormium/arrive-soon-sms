@@ -146,7 +146,7 @@ function generateDeparturesOptions(selectedDirectionIndex, weekDay) {
       success: function( data ) {
         departuresFulldata = data;
         departuresArray = departuresFulldata.scheduled.days[weekDay].scheduledTimes;
-        $('#departures').find('option').remove();weekDay
+        $('#departures').find('option').remove();
         for (var i = 0; i < departuresArray.length; i++) {
 
             $("#departures").append('<option value=' + departuresArray[i].exactTime + '>' + departuresArray[i].exactTime + '</option>');
