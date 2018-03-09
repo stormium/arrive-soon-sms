@@ -15,9 +15,9 @@ class EventRuleController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {   $now = Carbon::now('UTC')->toTimeString();
-        //dd($carbonNow);
-        //$now = Carbon::createFromFormat('H:i', $carbonNow)->toTimeString();
+    {   $nowRaw = Carbon::now('UTC')->toTimeString();
+        dump($nowRaw);
+        $now = Carbon::createFromFormat('H:i', $nowRaw)->toTimeString();
         var_dump($now);
         $today = Carbon::now('UTC')->toDateString();
         var_dump($today);
@@ -25,24 +25,72 @@ class EventRuleController extends Controller
         ->where('updated_at', '<', $today)
         ->get();
         dump($rules);
-        $notificationsArray = [];
-        foreach ($rules as $rule) {
-          $notification = $rule->notifications;
-          $notificationsArray[] = $notification;
-        }
-        $return = $this->getLiveArivals('vln_1921');
 
-        dump($return);
+
+        foreach ($rules as $rule) {
+          $stopId = $rule->stop;
+          $scheduleId = $rule->direction;
+          $offset = $rule->offset;
+          $ruleId = $rule->id;
+
+          $arivalsArray = $this->getLiveArivals($stopId, $scheduleId);
+          $notificationNeeded = $this->checkNotificationOffsetRule($offset, $arivalsArray);
+          if ($notificationNeeded) {
+            $this->updateDatetimeWhenNotificationSent($ruleId);
+            dump('notification sent');
+          } else {
+            dump('no notification needed for '. $scheduleId);
+          }
+
+        }
+
+        // $return = $this->getLiveArivals('vln_1921', 'vln_expressbus_3G');
+        //
+        // dump($return);
+        //
+        // $response = $this->checkNotificationOffsetRule(15, $return);
+        // dump($response);
+        //
+        // $this->updateDatetimeWhenNotificationSent(2);
 
     }
 
-    protected function getLiveArivals($stopId) {
+    protected function getLiveArivals($stopId, $scheduleId) {
 
       $url='http://api-ext.trafi.com/departures?api_key=4194f417c45ce354aa7994dcd6594cc7&region=vilnius';
       $fullUrl=$url . "&stopId=" . $stopId;
       $json=file_get_contents($fullUrl);
       $array = json_decode($json, true);
-      return $array['Schedules'];
+      $foundScheduleIdIndex = 0;
+      $schedulesArray = $array['Schedules'];
+
+      for ($i=0; $i < count($schedulesArray) ; $i++) {
+        $collection = collect($schedulesArray[$i]);
+        if ($collection->contains($scheduleId)) {
+          $foundScheduleIdIndex = $i;
+        }
+      }
+      $departureTimeArray = [];
+      foreach ($schedulesArray[$foundScheduleIdIndex]['Departures'] as $item) {
+        array_push($departureTimeArray, $item['RemainingMinutes']);
+      }
+      dump($departureTimeArray);
+      return $departureTimeArray;
+    }
+
+    protected function checkNotificationOffsetRule($offset, Array $arivals) {
+      if (in_array($offset, $arivals)) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+
+    protected function updateDatetimeWhenNotificationSent($ruleId) {
+      $now = Carbon::now('UTC')->toDateTimeString();
+      $item = EventRule::find($ruleId);
+      $item->updated_at = $now;
+      $item->save();
     }
 
 
@@ -75,7 +123,7 @@ class EventRuleController extends Controller
 
       $departureAt = Carbon::createFromFormat('H:i', $departureAtString, $userTimeZone)->setTimezone('UTC')->toTimeString();
 
-      $notificationAt = Carbon::createFromFormat('H:i', $departureAtString, $userTimeZone)->setTimezone('UTC')->subMinutes($offset+5)->toTimeString();
+      $notificationAt = Carbon::createFromFormat('H:i', $departureAtString, $userTimeZone)->setTimezone('UTC')->subMinutes($offset+4)->toTimeString();
 
 
 
@@ -140,7 +188,7 @@ class EventRuleController extends Controller
 
     protected function convertToWeekdayName($value) {
       if ($value == 0) {
-        $result = getCurrentWeekday();
+        $result = $this->getCurrentWeekday();
         return $result;
       } elseif ($value == 1) {
         return 'Workday';
