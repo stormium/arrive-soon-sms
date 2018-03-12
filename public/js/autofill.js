@@ -39,7 +39,6 @@ $( function searchStop() {
       $('#stop').find('option').remove();
       $('#departures').find('option').remove();
       $('#directions').find('option').remove();
-
       $('input[name=departuresDayOption][value="0"]').prop('checked', true);
       $('.w3-radio').prop('disabled', true);
 
@@ -50,6 +49,8 @@ $( function searchStop() {
       $("#stop").append('<option value="">Select Stop according direction</option>');
       getStopsOptions();
 
+      // $("#stop").unbind('change'); - helps to provent double call when page is not refreshed
+      $("#stop").unbind('change');
       $('#stop').on('change', function()
       {
           $('#departures').find('option').remove();
@@ -60,7 +61,7 @@ $( function searchStop() {
           $("#directions").append('<option value="">Select Direction</option>');
           getDirectionOptions(selectedStopId);
       });
-
+      $("#directions").unbind('change');
       $('#directions').on('change', function()
       {
           $('#departures').find('option').remove();
@@ -68,7 +69,6 @@ $( function searchStop() {
           $('.w3-radio').prop('disabled', false);
           selectedDirectionIndex = $('#directions').prop('selectedIndex');
           selectedDirectionIndex--;
-          console.log(selectedDirectionIndex);
           generateDeparturesOptions(selectedDirectionIndex, 0);
       });
 
@@ -117,11 +117,13 @@ function getDirectionOptions(selectedStopId) {
     },
     success: function( data ) {
 
+      directionsArray = [];
       directionsArray = data.Schedules;
-      console.log(directionsArray);
       for (var i = 0; i < data.Schedules.length; i++) {
-
-          $("#directions").append('<option value=' + data.Schedules[i].ScheduleId + '>' + data.Schedules[i].Name + ' ' + data.Schedules[i].Destination + '</option>');
+        $("#directions").append('<option value=' + data.Schedules[i].ScheduleId + '>' + data.Schedules[i].Name + ' ' + data.Schedules[i].Destination + '</option>');
+        //change background color of direction according transport type
+        var bColor = data.Schedules[i].Color;
+        $("#directions option:last-of-type").css("background-color","#" + bColor + "");
       }
     },
     error: function() {
@@ -161,9 +163,16 @@ function generateDeparturesOptions(selectedDirectionIndex, weekDay) {
 
 function updateDeparturesOptionsWeekdayChanged(weekDay) {
   $('#departures').find('option').remove();
-  departuresArray = departuresFulldata.scheduled.days[weekDay].scheduledTimes;
-  for (var i = 0; i < departuresArray.length; i++) {
+  if (departuresFulldata.scheduled.days[weekDay] != null) {
+    departuresArray = departuresFulldata.scheduled.days[weekDay].scheduledTimes;
+    console.log(departuresArray);
 
-      $("#departures").append('<option value=' + departuresArray[i].exactTime + '>' + departuresArray[i].exactTime + '</option>');
+    for (var i = 0; i < departuresArray.length; i++) {
+
+        $("#departures").append('<option value=' + departuresArray[i].exactTime + '>' + departuresArray[i].exactTime + '</option>');
+    }
+  } else if (departuresFulldata.scheduled.days[weekDay] == null) {
+    $("#departures").append("<option value=''>no departures found</option>");
   }
+
 }

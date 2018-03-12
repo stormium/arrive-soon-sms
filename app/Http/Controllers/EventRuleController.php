@@ -17,12 +17,14 @@ class EventRuleController extends Controller
     public function index()
     {   $nowRaw = Carbon::now('UTC')->toTimeString();
         dump($nowRaw);
-        $now = Carbon::createFromFormat('H:i', $nowRaw)->toTimeString();
-        var_dump($now);
+        $now = Carbon::createFromFormat('H:i:s', $nowRaw, 'UTC')->toTimeString();
+        dump($now);
         $today = Carbon::now('UTC')->toDateString();
         var_dump($today);
+        $currentWeekday = $this->getCurrentWeekday();
         $rules = EventRule::where('notification_at', '<=' , $now)
         ->where('updated_at', '<', $today)
+        ->where('weekday', '=', $currentWeekday)
         ->get();
         dump($rules);
 
@@ -39,7 +41,7 @@ class EventRuleController extends Controller
             $this->updateDatetimeWhenNotificationSent($ruleId);
             dump('notification sent');
           } else {
-            dump('no notification needed for '. $scheduleId);
+            dump('no notification still needed for '. $scheduleId);
           }
 
         }
