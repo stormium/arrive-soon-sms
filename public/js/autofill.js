@@ -1,4 +1,4 @@
-
+"use strict";
 var stops = {};
 var namesArray = [];
 var selectedStopIndex;
@@ -9,7 +9,7 @@ var stopCoords = {};
 var directionsArray = [];
 var selectedDirectionIndex;
 var departuresFulldata = {};
-
+var departuresArray = [];
 $( function searchStop() {
   $( "#search" ).autocomplete({
 
@@ -70,6 +70,7 @@ $( function searchStop() {
           selectedDirectionIndex = $('#directions').prop('selectedIndex');
           selectedDirectionIndex--;
           generateDeparturesOptions(selectedDirectionIndex, 0);
+          generateObjectNameInputValue(selectedDirectionIndex);
       });
 
       $('.w3-radio').on('change', function()
@@ -119,6 +120,7 @@ function getDirectionOptions(selectedStopId) {
 
       directionsArray = [];
       directionsArray = data.Schedules;
+      console.log(directionsArray);
       for (var i = 0; i < data.Schedules.length; i++) {
         $("#directions").append('<option value=' + data.Schedules[i].ScheduleId + '>' + data.Schedules[i].Name + ' ' + data.Schedules[i].Destination + '</option>');
         //change background color of direction according transport type
@@ -158,15 +160,13 @@ function generateDeparturesOptions(selectedDirectionIndex, weekDay) {
         console.log('An error has occurred');
       },
     } );
-    }
+  }
 
 
 function updateDeparturesOptionsWeekdayChanged(weekDay) {
   $('#departures').find('option').remove();
   if (departuresFulldata.scheduled.days[weekDay] != null) {
     departuresArray = departuresFulldata.scheduled.days[weekDay].scheduledTimes;
-    console.log(departuresArray);
-
     for (var i = 0; i < departuresArray.length; i++) {
 
         $("#departures").append('<option value=' + departuresArray[i].exactTime + '>' + departuresArray[i].exactTime + '</option>');
@@ -175,4 +175,9 @@ function updateDeparturesOptionsWeekdayChanged(weekDay) {
     $("#departures").append("<option value=''>no departures found</option>");
   }
 
+}
+
+function generateObjectNameInputValue(selectedDirectionIndex) {
+  var name = directionsArray[selectedDirectionIndex].Name;
+  $('.objectName').val(name);
 }

@@ -8,7 +8,9 @@ class EventRule extends Model
 {
   protected $fillable = [
     'stop',
-    'direction',
+    'schedule_id',
+    'object_name',
+    'transport_type',
     'departure_at',
     'weekday',
     'notification_at',

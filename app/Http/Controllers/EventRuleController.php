@@ -6,6 +6,7 @@ use App\EventRule;
 
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use App\Helpers\SmsGatewayHelper;
 
 class EventRuleController extends Controller
 {
@@ -14,6 +15,13 @@ class EventRuleController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    private $smsHelper;
+
+    public function __construct() {
+      $this->smsHelper = new SmsGatewayHelper('stormium@post.com', 'abc1234');
+    }
+
+
     public function index()
     {   $nowRaw = Carbon::now('UTC')->toTimeString();
         dump($nowRaw);
@@ -31,13 +39,16 @@ class EventRuleController extends Controller
 
         foreach ($rules as $rule) {
           $stopId = $rule->stop;
-          $scheduleId = $rule->direction;
+          $scheduleId = $rule->schedule_id;
           $offset = $rule->offset;
           $ruleId = $rule->id;
+          $objectName =  $rule->object_name;
+          $tranportType =  $rule->transport_type;
 
           $arivalsArray = $this->getLiveArivals($stopId, $scheduleId);
           $notificationNeeded = $this->checkNotificationOffsetRule($offset, $arivalsArray);
           if ($notificationNeeded) {
+            $this->prepareSms($objectName, $tranportType);
             $this->updateDatetimeWhenNotificationSent($ruleId);
             dump('notification sent');
           } else {
@@ -95,6 +106,27 @@ class EventRuleController extends Controller
       $item->save();
     }
 
+    protected function prepareSms($objectName, $tranportType){
+      // $message = 'Your ' . $tranportType . 'No.' . $objectName . ';
+    }
+
+
+    public function sendSMS() {
+
+      $deviceID = 82787;
+      $number = '+37067211635';
+      $message = 'Hello World!';
+
+      $options = [
+      // // 'send_at' => strtotime('+10 minutes'), // Send the message in 10 minutes
+      // // 'expires_at' => strtotime('+1 hour') // Cancel the message in 1 hour if the message is not yet sent
+      ];
+
+      //Please note options is no required and can be left out
+      $result = $this->smsHelper->sendMessageToNumber($number, $message, $deviceID, $options);
+      dump( $result);
+    }
+
 
     /**
      * Show the form for creating a new resource.
@@ -127,11 +159,15 @@ class EventRuleController extends Controller
 
       $notificationAt = Carbon::createFromFormat('H:i', $departureAtString, $userTimeZone)->setTimezone('UTC')->subMinutes($offset+4)->toTimeString();
 
+      $scheduleId = $request->get('directions');
 
+      $transportType = $this->getTransportType($scheduleId);
 
       $post = [
         'stop' => $request->get('stop'),
-        'direction' => $request->get('directions'),
+        'object_name' => $request->get('objectName'),
+        'transport_type' => $transportType,
+        'schedule_id' => $request->get('directions'),
         'departure_at' => $departureAt,
         'weekday' => $convertedWeekday,
         'notification_at' => $notificationAt,
@@ -218,6 +254,21 @@ class EventRuleController extends Controller
       }
     }
 
+    protected function getTransportType($scheduleId) {
+      $target = '';
+      if (preg_match('/_(.*?)\_/s', $scheduleId, $matches)) {
+          $target = $matches[1];
+      };
+
+      dump($target);
+      if ($target == 'bus') {
+        return 'Bus';
+      } elseif ($target == 'expressbus') {
+        return 'ExpressBus';
+      } elseif ($target == 'trol') {
+        return 'Trolleybus';
+      }
+    }
 
     // public function generateNotifications(Array cronResponse) {
     //   foreach ($cronResponse as $item) {

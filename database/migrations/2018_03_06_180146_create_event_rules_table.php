@@ -16,7 +16,9 @@ class CreateEventRulesTable extends Migration
         Schema::create('event_rules', function (Blueprint $table) {
             $table->increments('id');
             $table->string('stop');
-            $table->string('direction');
+            $table->string('schedule_id');
+            $table->string('object_name');
+            $table->string('transport_type');
             $table->time('departure_at');
             $table->string('weekday');
             $table->time('notification_at');

@@ -110,6 +110,7 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
     <option value="20">20 min</option>
   </select>
   <br>
+  <input class="objectName" type="hidden" name="objectName" value="">
   <button type="submit" class="w3-btn w3-blue-grey">Register</button>
 </form>
 
