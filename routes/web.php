@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Input;
 */
 
 Route::get('/', function () {
-    return view('index1');
+    return view('index1')->name('index1');
 });
 
 Route::get('/proxy.php', function () {

@@ -4,7 +4,7 @@ namespace App\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
-use App\Helpers\EventRuleCheckHelper;
+//use App\Helpers\EventRuleCheckHelper;
 
 // * * * * * php /var/www/artisan schedule:run >> /dev/null 2>&1
 // * * * * * ( sleep 30 ; php /var/www/artisan schedule:run >> /dev/null 2>&1 )
@@ -18,10 +18,7 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         //
     ];
-    private $eventRuleCheckHelper;
-    public function __construct(EventRuleCheckHelper $eventRuleCheckHelper) {
-      $this->eventRuleCheckHelper = $eventRuleCheckHelper;
-    }
+    // protected $eventRuleCheckHelper;
 
     /**
      * Define the application's command schedule.
@@ -29,12 +26,22 @@ class Kernel extends ConsoleKernel
      * @param  \Illuminate\Console\Scheduling\Schedule  $schedule
      * @return void
      */
+     //
+     // public function __construct(EventRuleCheckHelper $eventRuleCheckHelper) {
+     //
+     //   $this->eventRuleCheckHelper = $eventRuleCheckHelper;
+     //
+     // }
+
+
     protected function schedule(Schedule $schedule)
     {
-      $schedule->call(
-        $this->eventRuleCheckHelper->check();
-        )->everyMinute()
-        ->sendOutputTo('schedule.log');
+      $schedule->command('event:check')->everyMinute();
+      sleep(15);
+      $schedule->command('event:check')->everyMinute();
+      sleep(15);
+      $schedule->command('event:check')->everyMinute();
+      sleep(15);
     }
 
     /**

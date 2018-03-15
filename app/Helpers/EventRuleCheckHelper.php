@@ -5,6 +5,7 @@ use App\EventRule;
 use App\Helpers\SmsGatewayHelper;
 use App\Helpers\TimeConvertHelper;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 
 class EventRuleCheckHelper {
   private $timeConvertHelper;
@@ -27,6 +28,7 @@ class EventRuleCheckHelper {
       ->where('weekday', '=', $currentWeekday)
       ->get();
       dump($rules);
+      Log::debug($rules);
 
 
       foreach ($rules as $rule) {
