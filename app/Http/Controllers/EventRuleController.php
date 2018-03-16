@@ -3,11 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\EventRule;
-
 use Illuminate\Http\Request;
 use Carbon\Carbon;
-
-use App\Helpers\EventRuleCheckHelper;
 use App\Helpers\TimeConvertHelper;
 
 class EventRuleController extends Controller
@@ -21,16 +18,16 @@ class EventRuleController extends Controller
     private $eventRuleCheckHelper;
     private $timeConvertHelper;
 
-    public function __construct(TimeConvertHelper $timeConvertHelper, EventRuleCheckHelper $eventRuleCheckHelper) {
+    public function __construct(TimeConvertHelper $timeConvertHelper) {
 
-      $this->eventRuleCheckHelper = $eventRuleCheckHelper;
+      // $this->eventRuleCheckHelper = $eventRuleCheckHelper;
       $this->timeConvertHelper = $timeConvertHelper;
     }
 
 
     public function index()
     {
-      $this->eventRuleCheckHelper->check();
+      // $this->eventRuleCheckHelper->check();
 
     }
 
@@ -52,6 +49,7 @@ class EventRuleController extends Controller
      */
     public function store(Request $request)
     {
+      $this->validator($request);
       $userTimeZone = 'Europe/Vilnius';
 
       $weekday = $request->get('departuresDayOption');
@@ -70,6 +68,7 @@ class EventRuleController extends Controller
       $transportType = $this->timeConvertHelper->getTransportType($scheduleId);
 
       $post = [
+        'search_value'=> $request->get('searchValue'),
         'stop' => $request->get('stop'),
         'object_name' => $request->get('objectName'),
         'transport_type' => $transportType,
@@ -82,7 +81,7 @@ class EventRuleController extends Controller
 
       EventRule::create($post);
 
-      return route('index1');
+      return redirect()->route('index1');
     }
 
     /**
@@ -102,9 +101,14 @@ class EventRuleController extends Controller
      * @param  \App\EventRule  $eventRule
      * @return \Illuminate\Http\Response
      */
-    public function edit(EventRule $eventRule)
+    public function edit($id)
     {
-        //
+        $ruleItem = EventRule::findOrFail($id);
+        $rule = $ruleItem->attributes;
+
+        return view('editRule', [
+          'rule' => $rule
+        ]);
     }
 
     /**
@@ -128,6 +132,17 @@ class EventRuleController extends Controller
     public function destroy(EventRule $eventRule)
     {
         //
+    }
+
+    protected function validator($data) {
+      return $data->validate([
+        'searchValue' => 'required|string|max:255',
+        'stop' => 'required|string|max:255',
+        'objectName' => 'required|string|max:255',
+        'directions' => 'required|string|max:255',
+        'departures' => 'required|string|date_format:H:i|max:255',
+        'offset' => 'required|integer|between:5,20'
+      ]);
     }
 
 }

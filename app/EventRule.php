@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class EventRule extends Model
 {
   protected $fillable = [
+    'search_value',
     'stop',
     'schedule_id',
     'object_name',

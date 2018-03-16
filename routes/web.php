@@ -12,8 +12,8 @@ use Illuminate\Support\Facades\Input;
 */
 
 Route::get('/', function () {
-    return view('index1')->name('index1');
-});
+    return view('index1');
+})->name('index1');
 
 Route::get('/proxy.php', function () {
     header('Content-type: application/json; charset=utf-8');
@@ -27,4 +27,4 @@ Route::get('/proxy.php', function () {
 
 Route::post('/add_rule', 'EventRuleController@store')->name('rule_store');
 Route::get('/index', 'EventRuleController@index')->name('rule_index');
-Route::get('/send', 'EventRuleController@sendSMS');
+Route::get('/editRule/{id}', 'EventRuleController@edit')->name('editRule');;

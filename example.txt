@@ -359,3 +359,247 @@ Running scheduled command: '/usr/bin/php7.2' 'artisan' event:check > '/dev/null'
 Running scheduled command: '/usr/bin/php7.2' 'artisan' event:check > '/dev/null' 2>&1
 Running scheduled command: '/usr/bin/php7.2' 'artisan' event:check > '/dev/null' 2>&1
 Running scheduled command: '/usr/bin/php7.2' 'artisan' event:check > '/dev/null' 2>&1
+Running scheduled command: '/usr/bin/php7.2' 'artisan' event:check > '/dev/null' 2>&1
+Running scheduled command: '/usr/bin/php7.2' 'artisan' event:check > '/dev/null' 2>&1
+Running scheduled command: '/usr/bin/php7.2' 'artisan' event:check > '/dev/null' 2>&1
+Running scheduled command: '/usr/bin/php7.2' 'artisan' event:check > '/dev/null' 2>&1
+Running scheduled command: '/usr/bin/php7.2' 'artisan' event:check > '/dev/null' 2>&1
+Running scheduled command: '/usr/bin/php7.2' 'artisan' event:check > '/dev/null' 2>&1
+Running scheduled command: '/usr/bin/php7.2' 'artisan' event:check > '/dev/null' 2>&1
+Running scheduled command: '/usr/bin/php7.2' 'artisan' event:check > '/dev/null' 2>&1
+Running scheduled command: '/usr/bin/php7.2' 'artisan' event:check > '/dev/null' 2>&1
+Running scheduled command: '/usr/bin/php7.2' 'artisan' event:check > '/dev/null' 2>&1
+Running scheduled command: '/usr/bin/php7.2' 'artisan' event:check > '/dev/null' 2>&1
+Running scheduled command: '/usr/bin/php7.2' 'artisan' event:check > '/dev/null' 2>&1
+Running scheduled command: '/usr/bin/php7.2' 'artisan' event:check > '/dev/null' 2>&1
+Running scheduled command: '/usr/bin/php7.2' 'artisan' event:check > '/dev/null' 2>&1
+Running scheduled command: '/usr/bin/php7.2' 'artisan' event:check > '/dev/null' 2>&1
+Running scheduled command: '/usr/bin/php7.2' 'artisan' event:check > '/dev/null' 2>&1
+Running scheduled command: '/usr/bin/php7.2' 'artisan' event:check > '/dev/null' 2>&1
+No scheduled commands are ready to run.
+Running scheduled command: '/usr/bin/php7.2' 'artisan' event:check > '/dev/null' 2>&1
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+
+   Symfony\Component\Debug\Exception\FatalThrowableError  : Parse error: syntax error, unexpected '}', expecting ';'
+
+  at /var/www/routes/web.php: 16
+    12| */
+    13| 
+    14| Route::get('/', function () {
+    15|     return view('index1')
+  > 16| })->name('index1');
+    17| 
+    18| Route::get('/proxy.php', function () {
+    19|     header('Content-type: application/json; charset=utf-8');
+    20|     $url=Input::get('url');
+
+  Exception trace:
+
+  1   Illuminate\Routing\Router::loadRoutes("/var/www/routes/web.php")
+      /var/www/vendor/laravel/framework/src/Illuminate/Routing/Router.php : 350
+
+  2   Illuminate\Routing\Router::group(["App\Http\Controllers"], "/var/www/routes/web.php")
+      /var/www/vendor/laravel/framework/src/Illuminate/Routing/RouteRegistrar.php : 105
+
+  Please use the argument -v to see more details.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.
+No scheduled commands are ready to run.

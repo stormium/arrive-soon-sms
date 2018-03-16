@@ -15,6 +15,7 @@ class CreateEventRulesTable extends Migration
     {
         Schema::create('event_rules', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('search_value');
             $table->string('stop');
             $table->string('schedule_id');
             $table->string('object_name');
