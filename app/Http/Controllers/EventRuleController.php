@@ -104,7 +104,7 @@ class EventRuleController extends Controller
     public function edit($id)
     {
         $ruleItem = EventRule::findOrFail($id);
-        $rule = $ruleItem->attributes;
+        $rule = $ruleItem;
 
         return view('editRule', [
           'rule' => $rule

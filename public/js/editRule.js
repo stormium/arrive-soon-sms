@@ -10,80 +10,158 @@ var directionsArray = [];
 var selectedDirectionIndex;
 var departuresFulldata = {};
 var departuresArray = [];
-$( function searchStop() {
-  $( "#search" ).autocomplete({
 
-    source: function( request, response ) {
-      $.ajax( {
-        url: 'http://api-ext.trafi.com/locations?region=vilnius&api_key=4194f417c45ce354aa7994dcd6594cc7',
-        dataType: 'json',
-        data: {
-           q: request.term
-        },
-        success: function( data ) {
-          namesArray = [];
-          for (var i = 0; i < data.length; i++) {
-            namesArray.push(data[i].Name);
-          }
-          response( namesArray );
-          stops = data;
-          },
-        error: function() {
+if (searchValue) {
+console.log(searchValue);
 
-           console.log('An error has occurred');
-        },
-      } );
+$( function getLocationData() {
+  $.ajax( {
+    url: 'http://api-ext.trafi.com/locations?region=vilnius&api_key=4194f417c45ce354aa7994dcd6594cc7',
+    async:true,
+    dataType: 'json',
+    data: {
+       q: searchValue
     },
-    minLength: 3,
-    select: function( event, ui ) {
-      $('#stop').find('option').remove();
-      $('#departures').find('option').remove();
-      $('#directions').find('option').remove();
-      $('input[name=departuresDayOption][value="0"]').prop('checked', true);
-      $('.w3-radio').prop('disabled', true);
+    success: function( data ) {
+      console.log(data);
+      stops = data;
+    },
+    error: function() {
 
-      selectedStopIndex = jQuery.inArray( ui.item.value, namesArray );
-      selectedStopName = ui.item.value;
-      stopCoords = stops[selectedStopIndex].Coordinate;
-      console.log( "Selected: " + ui.item.value + " aka " + selectedStopIndex);
-      $("#stop").append('<option value="">Select Stop according direction</option>');
-      getStopsOptions();
+       console.log('An error has occurred');
+    },
+  } );
+});
 
-      // $("#stop").unbind('change'); - helps to provent double call when page is not refreshed
-      $("#stop").unbind('change');
-      $('#stop').on('change', function()
-      {
-          $('#departures').find('option').remove();
-          $('#directions').find('option').remove();
-          $('input[name=departuresDayOption][value="0"]').prop('checked', true);
-          $('.w3-radio').prop('disabled', true);
-          selectedStopId = this.value;
-          $("#directions").append('<option value="">Select Direction</option>');
-          getDirectionOptions(selectedStopId);
-      });
-      $("#directions").unbind('change');
-      $('#directions').on('change', function()
-      {
-          $('#departures').find('option').remove();
-          $('input[name=departuresDayOption][value="0"]').prop('checked', true);
-          $('.w3-radio').prop('disabled', false);
-          selectedDirectionIndex = $('#directions').prop('selectedIndex');
-          selectedDirectionIndex--;
-          generateDeparturesOptions(selectedDirectionIndex, 0);
-          generateObjectNameInputValue(selectedDirectionIndex);
-      });
+$('#stop').find('option').remove();
+$('#departures').find('option').remove();
+$('#directions').find('option').remove();
+$('input[name=departuresDayOption][value="0"]').prop('checked', true);
+$('.w3-radio').prop('disabled', true);
 
-      $('.w3-radio').on('change', function()
-      {
-          var selectedWorkdayOptionValue = $('.w3-radio:checked').val();
-          updateDeparturesOptionsWeekdayChanged(selectedWorkdayOptionValue);
-      });
+console.log(stops);
 
-      }
-  });
+stopCoords = stops[0].Coordinate;
+selectedStopName = stops[0].Name;
+selectedStopIndex = 0;
+
+
+//stopCoords = stops[0].Coordinate;
+//console.log( "Selected: " + ui.item.value + " aka " + selectedStopIndex);
+$("#stop").append('<option value="">Select Stop according direction</option>');
+getStopsOptions();
+
+      // getStopsOptions();
+      //
+      // // $("#stop").unbind('change'); - helps to provent double call when page is not refreshed
+      // $("#stop").unbind('change');
+      // $('#stop').on('change', function()
+      // {
+      //     $('#departures').find('option').remove();
+      //     $('#directions').find('option').remove();
+      //     $('input[name=departuresDayOption][value="0"]').prop('checked', true);
+      //     $('.w3-radio').prop('disabled', true);
+      //     selectedStopId = this.value;
+      //     $("#directions").append('<option value="">Select Direction</option>');
+      //     getDirectionOptions(selectedStopId);
+      // });
+      // $("#directions").unbind('change');
+      // $('#directions').on('change', function()
+      // {
+      //     $('#departures').find('option').remove();
+      //     $('input[name=departuresDayOption][value="0"]').prop('checked', true);
+      //     $('.w3-radio').prop('disabled', false);
+      //     selectedDirectionIndex = $('#directions').prop('selectedIndex');
+      //     selectedDirectionIndex--;
+      //     generateDeparturesOptions(selectedDirectionIndex, 0);
+      //     generateObjectNameInputValue(selectedDirectionIndex);
+      // });
+      //
+      // $('.w3-radio').on('change', function()
+      // {
+      //     var selectedWorkdayOptionValue = $('.w3-radio:checked').val();
+      //     updateDeparturesOptionsWeekdayChanged(selectedWorkdayOptionValue);
+      // });
+
+
+
+// } else {
+  // $( function searchStop() {
+  //   $( "#search" ).autocomplete({
+  //
+  //     source: function( request, response ) {
+  //       $.ajax( {
+  //         url: 'http://api-ext.trafi.com/locations?region=vilnius&api_key=4194f417c45ce354aa7994dcd6594cc7',
+  //         dataType: 'json',
+  //         data: {
+  //            q: request.term
+  //         },
+  //         success: function( data ) {
+  //           namesArray = [];
+  //           for (var i = 0; i < data.length; i++) {
+  //             namesArray.push(data[i].Name);
+  //           }
+  //           response( namesArray );
+  //           stops = data;
+  //           },
+  //         error: function() {
+  //
+  //            console.log('An error has occurred');
+  //         },
+  //       } );
+  //     },
+  //     minLength: 3,
+  //     select: function( event, ui ) {
+  //       $('#stop').find('option').remove();
+  //       $('#departures').find('option').remove();
+  //       $('#directions').find('option').remove();
+  //       $('input[name=departuresDayOption][value="0"]').prop('checked', true);
+  //       $('.w3-radio').prop('disabled', true);
+  //
+  //       selectedStopIndex = jQuery.inArray( ui.item.value, namesArray );
+  //       selectedStopName = ui.item.value;
+  //       stopCoords = stops[selectedStopIndex].Coordinate;
+  //       console.log( "Selected: " + ui.item.value + " aka " + selectedStopIndex);
+  //       $("#stop").append('<option value="">Select Stop according direction</option>');
+  //       getStopsOptions();
+  //
+  //       // $("#stop").unbind('change'); - helps to provent double call when page is not refreshed
+  //       $("#stop").unbind('change');
+  //       $('#stop').on('change', function()
+  //       {
+  //           $('#departures').find('option').remove();
+  //           $('#directions').find('option').remove();
+  //           $('input[name=departuresDayOption][value="0"]').prop('checked', true);
+  //           $('.w3-radio').prop('disabled', true);
+  //           selectedStopId = this.value;
+  //           $("#directions").append('<option value="">Select Direction</option>');
+  //           getDirectionOptions(selectedStopId);
+  //       });
+  //       $("#directions").unbind('change');
+  //       $('#directions').on('change', function()
+  //       {
+  //           $('#departures').find('option').remove();
+  //           $('input[name=departuresDayOption][value="0"]').prop('checked', true);
+  //           $('.w3-radio').prop('disabled', false);
+  //           selectedDirectionIndex = $('#directions').prop('selectedIndex');
+  //           selectedDirectionIndex--;
+  //           generateDeparturesOptions(selectedDirectionIndex, 0);
+  //           generateObjectNameInputValue(selectedDirectionIndex);
+  //       });
+  //
+  //       $('.w3-radio').on('change', function()
+  //       {
+  //           var selectedWorkdayOptionValue = $('.w3-radio:checked').val();
+  //           updateDeparturesOptionsWeekdayChanged(selectedWorkdayOptionValue);
+  //       });
+  //
+  //       }
+  //   });
+  // }
+  //
+  // );
 }
 
-);
 
 function getStopsOptions() {
   $.ajax( {
