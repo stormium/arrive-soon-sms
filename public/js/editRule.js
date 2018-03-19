@@ -11,10 +11,15 @@ var selectedDirectionIndex;
 var departuresFulldata = {};
 var departuresArray = [];
 
-if (searchValue) {
-console.log(searchValue);
+var stopsArray = [];
 
-$( function getLocationData() {
+$( function () {
+  if (rule) {
+
+var return_first = function () {
+  var searchValue = rule.searchValue;
+  console.log(rule);
+  var tmp = null;
   $.ajax( {
     url: 'http://api-ext.trafi.com/locations?region=vilnius&api_key=4194f417c45ce354aa7994dcd6594cc7',
     async:true,
@@ -23,33 +28,30 @@ $( function getLocationData() {
        q: searchValue
     },
     success: function( data ) {
-      console.log(data);
-      stops = data;
+      stopsArray.push( data );
     },
     error: function() {
-
        console.log('An error has occurred');
     },
   } );
+
+}();
+  stops = stopsArray[0];
+  console.log(stopsArray);
+
+  stopCoords = stops[0].Coordinate;
+  selectedStopName = stops[0].Name;
+  selectedStopIndex = 0;
+  stopCoords = stops[0].Coordinate;
+  console.log( "Selected: " + selectedStopName + " aka " + selectedStopIndex);
+  getStopsOptions();
+  selectStopOptionFromEditData(rule.stop);
+
+}
+
 });
 
-$('#stop').find('option').remove();
-$('#departures').find('option').remove();
-$('#directions').find('option').remove();
-$('input[name=departuresDayOption][value="0"]').prop('checked', true);
-$('.w3-radio').prop('disabled', true);
 
-console.log(stops);
-
-stopCoords = stops[0].Coordinate;
-selectedStopName = stops[0].Name;
-selectedStopIndex = 0;
-
-
-//stopCoords = stops[0].Coordinate;
-//console.log( "Selected: " + ui.item.value + " aka " + selectedStopIndex);
-$("#stop").append('<option value="">Select Stop according direction</option>');
-getStopsOptions();
 
       // getStopsOptions();
       //
@@ -160,7 +162,7 @@ getStopsOptions();
   // }
   //
   // );
-}
+// }
 
 
 function getStopsOptions() {
@@ -258,4 +260,16 @@ function updateDeparturesOptionsWeekdayChanged(weekDay) {
 function generateObjectNameInputValue(selectedDirectionIndex) {
   var name = directionsArray[selectedDirectionIndex].Name;
   $('.objectName').val(name);
+}
+
+function selectStopOptionFromEditData (stopId) {
+
+    var value = stopId;
+          $("#stop option").each(function(){
+          console.log('radau');
+          if($(this).val()==value){ // EDITED THIS LINE
+
+            $(this).attr("selected","selected");
+        }
+    });
 }

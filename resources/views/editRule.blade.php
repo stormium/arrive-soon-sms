@@ -14,7 +14,14 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script type="text/javascript">
-    var searchValue = '{{ $rule->search_value }}';
+    var rule = {
+      searchValue: "{{ $rule->search_value }}",
+      stop: "{{ $rule->stop }}",
+      scheduleId: "{{ $rule->schedule_id }}",
+      departureAt: "{{ $rule->departure_at }}",
+      weekday: "{{ $rule->weekday }}",
+      offset: "{{ $rule->offset }}",
+    };
     // $.getScript('{{ URL::to('js/editRule.js') }}');
 </script>
 <script type="text/javascript" src="{{ URL::to('js/editRule.js') }}"></script>
