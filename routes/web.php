@@ -25,6 +25,16 @@ Route::get('/proxy.php', function () {
     echo $json;
 });
 
+Route::get('/editRule/proxy.php', function () {
+    header('Content-type: application/json; charset=utf-8');
+    $url=Input::get('url');
+    $trackId=Input::get('trackId');
+    $selectedStopId=Input::get('stopId');
+    $fullUrl=$url . "&trackId=" . $trackId . "&stopId=" . $selectedStopId;
+    $json=file_get_contents($fullUrl);
+    echo $json;
+});
+
 Route::post('/add_rule', 'EventRuleController@store')->name('rule_store');
 Route::get('/index', 'EventRuleController@index')->name('rule_index');
 Route::get('/editRule/{id}', 'EventRuleController@edit')->name('editRule');;

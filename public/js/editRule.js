@@ -11,7 +11,6 @@ var selectedDirectionIndex;
 var departuresFulldata = {};
 var departuresArray = [];
 
-var stopsArray = [];
 
 $( function () {
   if (rule) {
@@ -28,7 +27,14 @@ var return_first = function () {
        q: searchValue
     },
     success: function( data ) {
-      stopsArray.push( data );
+      stops = data;
+      stopCoords = stops[0].Coordinate;
+      selectedStopName = stops[0].Name;
+      selectedStopIndex = 0;
+      stopCoords = stops[0].Coordinate;
+      getStopsOptions();
+      selectedStopId = rule.stop;
+      getDirectionOptions(rule.stop);
     },
     error: function() {
        console.log('An error has occurred');
@@ -36,16 +42,10 @@ var return_first = function () {
   } );
 
 }();
-  stops = stopsArray[0];
-  console.log(stopsArray);
 
-  stopCoords = stops[0].Coordinate;
-  selectedStopName = stops[0].Name;
-  selectedStopIndex = 0;
-  stopCoords = stops[0].Coordinate;
-  console.log( "Selected: " + selectedStopName + " aka " + selectedStopIndex);
-  getStopsOptions();
-  selectStopOptionFromEditData(rule.stop);
+
+
+
 
 }
 
@@ -176,9 +176,18 @@ function getStopsOptions() {
     },
     success: function( data ) {
         for (var i = 0; i < data.Stops.length; i++) {
-
           if (data.Stops[i].Name == selectedStopName && data.Stops[i].Direction != '') {
-              $("#stop").append('<option value=' + data.Stops[i].Id + '>' + data.Stops[i].Direction + '</option>');
+              var selected = false;
+              if (rule) {
+                if (rule.stop == data.Stops[i].Id) {
+                  selected = true;
+                }
+              }
+              $("#stop").append($('<option>', {
+                value: data.Stops[i].Id,
+                text: data.Stops[i].Direction,
+                selected: selected
+              }));
           }
         }
     },
@@ -200,9 +209,22 @@ function getDirectionOptions(selectedStopId) {
 
       directionsArray = [];
       directionsArray = data.Schedules;
-      console.log(directionsArray);
       for (var i = 0; i < data.Schedules.length; i++) {
-        $("#directions").append('<option value=' + data.Schedules[i].ScheduleId + '>' + data.Schedules[i].Name + ' ' + data.Schedules[i].Destination + '</option>');
+        var text = data.Schedules[i].Name+' '+data.Schedules[i].Destination;
+        var selected = false;
+        if (rule) {
+          if (rule.scheduleId == data.Schedules[i].ScheduleId) {
+            selected = true;
+            selectedDirectionIndex = i;
+            var weekDay = weekDayConverter(rule.weekday);
+            generateDeparturesOptions(selectedDirectionIndex, weekDay);
+          }
+        }
+        $("#directions").append($('<option>', {
+          value: data.Schedules[i].ScheduleId,
+          text: text,
+          selected: selected
+        }));
         //change background color of direction according transport type
         var bColor = data.Schedules[i].Color;
         $("#directions option:last-of-type").css("background-color","#" + bColor + "");
@@ -216,7 +238,6 @@ function getDirectionOptions(selectedStopId) {
 
 function generateDeparturesOptions(selectedDirectionIndex, weekDay) {
   $('#departures').find('option').remove();
-
     var scheduleId = directionsArray[selectedDirectionIndex].ScheduleId;
     var trackId = directionsArray[selectedDirectionIndex].TrackId;
 
@@ -229,11 +250,23 @@ function generateDeparturesOptions(selectedDirectionIndex, weekDay) {
       dataType: 'json',
       success: function( data ) {
         departuresFulldata = data;
-        departuresArray = departuresFulldata.scheduled.days[weekDay].scheduledTimes;
+        departuresArray =  departuresFulldata.scheduled.days[weekDay].scheduledTimes;
         $('#departures').find('option').remove();
         for (var i = 0; i < departuresArray.length; i++) {
-
-            $("#departures").append('<option value=' + departuresArray[i].exactTime + '>' + departuresArray[i].exactTime + '</option>');
+            var selected = false;
+            if (rule) {
+              var timeWithOffset = timeOffsetConverter (rule.departureAt);
+              if (timeWithOffset == departuresArray[i].exactTime) {
+                console.log(timeWithOffset);
+                console.log(departuresArray[i].exactTime);
+                selected = true;
+              }
+            }
+            $("#departures").append($('<option>', {
+              value: departuresArray[i].exactTime,
+              text: departuresArray[i].exactTime,
+              selected: selected
+            }));
         }
       },
       error: function() {
@@ -263,13 +296,38 @@ function generateObjectNameInputValue(selectedDirectionIndex) {
 }
 
 function selectStopOptionFromEditData (stopId) {
-
+    console.log(stopId);
     var value = stopId;
-          $("#stop option").each(function(){
+          $("#stop > option").each(function(){
           console.log('radau');
           if($(this).val()==value){ // EDITED THIS LINE
 
             $(this).attr("selected","selected");
         }
     });
+}
+
+function weekDayConverter (weekday) {
+  var $value = 0;
+  if (weekday == 'Workday') {
+    $value = 1;
+  } else if (weekday == 'Saturday') {
+    $value = 2;
+  } else if (weekday == 'Sunday') {
+    $value = 3;
+  }
+  return $value;
+}
+
+function timeOffsetConverter (timeInUTC) {
+  var t = timeInUTC.split(':');
+  var minutes = (+t[0]) * 60 + (+t[1]);
+  var d = new Date();
+  var n = d.getTimezoneOffset();
+  minutes = minutes - n;
+  var min = minutes % 60;
+  var hours = Math.floor(minutes / 60);
+  min = (min < 10 ? '0' : '') + min;
+  hours = (hours < 10 ? '0' : '') + hours;
+  return hours + ':' + min;
 }

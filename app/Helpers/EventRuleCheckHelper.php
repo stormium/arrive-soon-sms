@@ -102,7 +102,7 @@ class EventRuleCheckHelper {
   public function sendSMS($message) {
 
     $deviceID = 82787;
-    $number = '+37061854201';
+    $number = '+37064581535';
 
     $options = [
     // 'send_at' => strtotime('+10 minutes'), // Send the message in 10 minutes
