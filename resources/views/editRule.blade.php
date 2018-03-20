@@ -21,6 +21,7 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
       departureAt: "{{ $rule->departure_at }}",
       weekday: "{{ $rule->weekday }}",
       offset: "{{ $rule->offset }}",
+      objectName: "{{ $rule->object_name }}"
     };
     // $.getScript('{{ URL::to('js/editRule.js') }}');
 </script>
@@ -84,10 +85,10 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
   <h3><i class="fa fa-envelope fa-fw"></i>SMS notification rule setup</h3>
 </div>
 
-<form class="w3-container w3-card-4" novalidate method="POST" action="{{ route('rule_store') }}">
+<form class="w3-container w3-card-4" novalidate method="POST" action="{{ route('updateRule', $rule->id) }}">
   {{ csrf_field() }}
   <label class="w3-text-teal"><b>Search Stop</b></label>
-  <input class="w3-input w3-border w3-light-grey w3-animate-input" type="text" style="width:30%" id="search" name="search" value="{{ $rule->search_value }}">
+  <input class="w3-input w3-border w3-light-grey w3-animate-input" type="text" style="width:30%" id="search" name="searchValue" value="{{ $rule->search_value }}">
 
   <label for="stop" class="w3-text-teal"><b>Stop</b></label><br>
   <select class="w3-select w3-border w3-light-grey w3-animate-input" name="stop" id="stop" style="width:30%">
@@ -145,7 +146,7 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
   @endif
   <br>
   <input class="objectName" type="hidden" name="objectName" value="">
-  <button type="submit" class="w3-btn w3-blue-grey">Create</button>
+  <button type="submit" class="w3-btn w3-blue-grey">Update</button>
 </form>
 
   <hr>

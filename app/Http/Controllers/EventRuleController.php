@@ -27,8 +27,10 @@ class EventRuleController extends Controller
 
     public function index()
     {
-      // $this->eventRuleCheckHelper->check();
+      $myRulesList = [];
+      $myRulesList = EventRule::all()->toArray();
 
+      return view('index1')->with('myRulesList', $myRulesList);
     }
 
     /**
@@ -118,9 +120,42 @@ class EventRuleController extends Controller
      * @param  \App\EventRule  $eventRule
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, EventRule $eventRule)
+    public function update(Request $request, $id)
     {
-        //
+
+      $this->validator($request);
+      $userTimeZone = 'Europe/Vilnius';
+
+      $weekday = $request->get('departuresDayOption');
+      $convertedWeekday = $this->timeConvertHelper->convertToWeekdayName($weekday);
+
+      $offset = $request->get('offset');
+
+      $departureAtString = $request->get('departures');
+
+      $departureAt = Carbon::createFromFormat('H:i', $departureAtString, $userTimeZone)->setTimezone('UTC')->toTimeString();
+
+      $notificationAt = Carbon::createFromFormat('H:i', $departureAtString, $userTimeZone)->setTimezone('UTC')->subMinutes($offset+3)->toTimeString();
+
+      $scheduleId = $request->get('directions');
+
+      $transportType = $this->timeConvertHelper->getTransportType($scheduleId);
+
+      $post = [
+        'search_value'=> $request->get('searchValue'),
+        'stop' => $request->get('stop'),
+        'object_name' => $request->get('objectName'),
+        'transport_type' => $transportType,
+        'schedule_id' => $request->get('directions'),
+        'departure_at' => $departureAt,
+        'weekday' => $convertedWeekday,
+        'notification_at' => $notificationAt,
+        'offset' => $request->get('offset'),
+      ];
+
+      $rule = EventRule::findOrFail($id);
+      $rule->update($post);
+      return redirect()->route('index1');
     }
 
     /**

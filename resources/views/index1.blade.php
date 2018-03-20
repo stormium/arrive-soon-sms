@@ -136,7 +136,29 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
   <button type="submit" class="w3-btn w3-blue-grey">Create</button>
 </form>
 
-  <hr>
+<hr>
+<div class="w3-panel w3-pale-green">
+  <h3><i class="fa fa-list fa-fw"></i>My Rules</h3>
+  <table class="w3-table">
+  <tr>
+    <th>First Name</th>
+    <th>Last Name</th>
+    <th>Points</th>
+  </tr>
+  <tr>
+    <td>Jill</td>
+    <td>Smith</td>
+    <td>50</td>
+  </tr>
+  @foreach ($myRulesList as $item)
+    <tr>
+      <td>Jill</td>
+      <td>Smith</td>
+      <td>50</td>
+    </tr>
+  @endforeach
+  </table>
+</div>
 
   <!-- Footer -->
   <footer class="w3-container w3-padding-16 w3-light-grey">
