@@ -24,6 +24,7 @@ class CreateEventRulesTable extends Migration
             $table->string('weekday');
             $table->time('notification_at');
             $table->integer('offset');
+            $table->string('icon_url');
             $table->integer('user_id')->nullable()->unsigned();
             $table->timestamps();
         });

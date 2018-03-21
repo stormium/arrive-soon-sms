@@ -48,6 +48,8 @@ class TimeConvertHelper {
       return 'ExpressBus';
     } elseif ($target == 'trol') {
       return 'Trolleybus';
+    } elseif ($target == 'nightbus') {
+      return 'Nightbus';
     }
   }
 

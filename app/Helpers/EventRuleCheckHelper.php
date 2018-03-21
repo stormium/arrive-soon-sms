@@ -17,17 +17,15 @@ class EventRuleCheckHelper {
 
   public function check()
   {   $nowRaw = Carbon::now('UTC')->toTimeString();
-      dump($nowRaw);
       $now = Carbon::createFromFormat('H:i:s', $nowRaw, 'UTC')->toTimeString();
-      dump($now);
       $today = Carbon::now('UTC')->toDateString();
-      var_dump($today);
       $currentWeekday = $this->timeConvertHelper->getCurrentWeekday();
       $rules = EventRule::where('notification_at', '<=' , $now)
-      ->where('updated_at', '<', $today)
-      ->where('weekday', '=', $currentWeekday)
+      ->where(function ($q) use ($today) {
+        $q->where('updated_at', '<', $today)
+          ->orWhere('created_at', '=', $today);
+      })->where('weekday', '=', $currentWeekday)
       ->get();
-      dump($rules);
       Log::debug($rules);
 
 
@@ -40,19 +38,18 @@ class EventRuleCheckHelper {
         $tranportType = $rule->transport_type;
 
         $arivalsArray = $this->getLiveArivals($stopId, $scheduleId);
+        Log::debug($arivalsArray);
         $notificationNeeded = $this->checkNotificationOffsetRule($offset, $arivalsArray);
         if ($notificationNeeded) {
           $message = $this->prepareSmsText($objectName, $tranportType, $offset);
-          dump($message);
+          Log::debug($message);
           $this->sendSMS($message);
           $this->updateDatetimeWhenNotificationSent($ruleId);
-          dump('notification sent');
+          Log::debug('notification sent');
         } else {
-          dump('no notification still needed for '. $scheduleId);
+          Log::debug('no notification still needed for '. $scheduleId);
         }
-
       }
-
   }
 
   protected function getLiveArivals($stopId, $scheduleId) {
@@ -102,7 +99,7 @@ class EventRuleCheckHelper {
   public function sendSMS($message) {
 
     $deviceID = 82787;
-    $number = '+37064581535';
+    $number = '+37061854201';
 
     $options = [
     // 'send_at' => strtotime('+10 minutes'), // Send the message in 10 minutes

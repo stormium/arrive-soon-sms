@@ -2,3 +2,12 @@
   color: white;
 
 }
+
+@media screen and (max-width: 600px) {
+  .w3-table th:nth-of-type(3) {
+    display: none;
+  }
+  .w3-table td:nth-of-type(3) {
+    display: none;
+  }
+}

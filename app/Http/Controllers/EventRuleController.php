@@ -27,10 +27,9 @@ class EventRuleController extends Controller
 
     public function index()
     {
-      $myRulesList = [];
-      $myRulesList = EventRule::all()->toArray();
 
-      return view('index1')->with('myRulesList', $myRulesList);
+      $myRules = EventRule::all();
+      return view('index1')->with('myRules', $myRules);
     }
 
     /**
@@ -79,6 +78,7 @@ class EventRuleController extends Controller
         'weekday' => $convertedWeekday,
         'notification_at' => $notificationAt,
         'offset' => $request->get('offset'),
+        'icon_url' => $request->get('iconUrl'),
       ];
 
       EventRule::create($post);
@@ -151,6 +151,7 @@ class EventRuleController extends Controller
         'weekday' => $convertedWeekday,
         'notification_at' => $notificationAt,
         'offset' => $request->get('offset'),
+        'icon_url' => $request->get('iconUrl'),
       ];
 
       $rule = EventRule::findOrFail($id);

@@ -113,6 +113,7 @@ $( "#search" ).autocomplete({
         selectedDirectionIndex--;
         generateDeparturesOptions(selectedDirectionIndex, 0);
         generateObjectNameInputValue(selectedDirectionIndex);
+        generateObjectIconUrlInputValue(selectedDirectionIndex);
     });
 
     $('.w3-radio').on('change', function()
@@ -259,6 +260,11 @@ function generateObjectNameInputValue(selectedDirectionIndex) {
   $('.objectName').val(name);
 }
 
+function generateObjectIconUrlInputValue(selectedDirectionIndex) {
+  var iconUrl = directionsArray[selectedDirectionIndex].IconUrl;
+  $('.iconUrl').val(iconUrl);
+}
+
 function weekDayConverter (weekday) {
   var $value = 0;
   if (weekday == 'Workday') {
@@ -324,6 +330,7 @@ function changeListener () {
       selectedDirectionIndex--;
       generateDeparturesOptions(selectedDirectionIndex, 0);
       generateObjectNameInputValue(selectedDirectionIndex);
+      generateObjectIconUrlInputValue(selectedDirectionIndex);
   });
 
   $('.w3-radio').on('change', function()

@@ -34,6 +34,5 @@ Route::get('/editRule/proxy.php', function () {
 });
 
 Route::post('/add_rule', 'EventRuleController@store')->name('rule_store');
-Route::get('/index', 'EventRuleController@index')->name('rule_index');
 Route::get('/editRule/{id}', 'EventRuleController@edit')->name('editRule');
 Route::post('/updateRule/{id}', 'EventRuleController@update')->name('updateRule');

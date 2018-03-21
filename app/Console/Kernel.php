@@ -36,12 +36,12 @@ class Kernel extends ConsoleKernel
 
     protected function schedule(Schedule $schedule)
     {
-      // $schedule->command('event:check')->everyMinute();
-      // sleep(15);
-      // $schedule->command('event:check')->everyMinute();
-      // sleep(15);
-      // $schedule->command('event:check')->everyMinute();
-      // sleep(15);
+      $schedule->command('event:check')->everyMinute();
+      sleep(15);
+      $schedule->command('event:check')->everyMinute();
+      sleep(15);
+      $schedule->command('event:check')->everyMinute();
+      sleep(15);
     }
 
     /**

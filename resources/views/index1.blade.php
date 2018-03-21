@@ -133,28 +133,33 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
   @endif
   <br>
   <input class="objectName" type="hidden" name="objectName" value="">
+  <input class="iconUrl" type="hidden" name="iconUrl" value="">
   <button type="submit" class="w3-btn w3-blue-grey">Create</button>
 </form>
 
 <hr>
-<div class="w3-panel w3-pale-green">
+<div class="w3-card-4 w3-pale-green w3-container">
   <h3><i class="fa fa-list fa-fw"></i>My Rules</h3>
-  <table class="w3-table">
+  <table class="w3-table mylist">
   <tr>
-    <th>First Name</th>
-    <th>Last Name</th>
-    <th>Points</th>
+    <th>Direction</th>
+    <th>Stop</th>
+    <th>Weekday</th>
+    <th>Departure</th>
+    <th>Actions</th>
   </tr>
-  <tr>
-    <td>Jill</td>
-    <td>Smith</td>
-    <td>50</td>
-  </tr>
-  @foreach ($myRulesList as $item)
+  @foreach ($myRules as $item)
     <tr>
-      <td>Jill</td>
-      <td>Smith</td>
-      <td>50</td>
+      <td><img src="{{ $item->icon_url }}" class="w3-circle" style="width:32px"></td>
+      <td>{{ $item->search_value }}</td>
+      <td>{{ $item->weekday }}</td>
+      <td>{{ $item->departure_at }}</td>
+      <td>
+        <a href="{{ route('editRule',$item->id) }}"><button class="w3-btn w3-white w3-border w3-border-teal w3-round w3-padding-small w3-small">Edit</button></a>
+      </td>
+      <td>
+        <a href="{{ route('editRule',$item->id) }}"><button class="w3-btn w3-white w3-border w3-border-red w3-round w3-padding-small w3-small">X</button></a>
+      </td>
     </tr>
   @endforeach
   </table>

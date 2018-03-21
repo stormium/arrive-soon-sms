@@ -71,6 +71,7 @@ $( function searchStop() {
           selectedDirectionIndex--;
           generateDeparturesOptions(selectedDirectionIndex, 0);
           generateObjectNameInputValue(selectedDirectionIndex);
+          generateObjectIconUrlInputValue(selectedDirectionIndex);
       });
 
       $('.w3-radio').on('change', function()
@@ -180,4 +181,9 @@ function updateDeparturesOptionsWeekdayChanged(weekDay) {
 function generateObjectNameInputValue(selectedDirectionIndex) {
   var name = directionsArray[selectedDirectionIndex].Name;
   $('.objectName').val(name);
+}
+
+function generateObjectIconUrlInputValue(selectedDirectionIndex) {
+  var iconUrl = directionsArray[selectedDirectionIndex].IconUrl;
+  $('.iconUrl').val(iconUrl);
 }

@@ -15,7 +15,8 @@ class EventRule extends Model
     'departure_at',
     'weekday',
     'notification_at',
-    'offset'
+    'offset',
+    'icon_url'
   ];
 
   public function notifications()

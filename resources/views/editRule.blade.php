@@ -146,6 +146,7 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
   @endif
   <br>
   <input class="objectName" type="hidden" name="objectName" value="">
+  <input class="iconUrl" type="hidden" name="iconUrl" value="">
   <button type="submit" class="w3-btn w3-blue-grey">Update</button>
 </form>
 
