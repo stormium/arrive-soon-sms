@@ -22,12 +22,13 @@ class EventRuleCheckHelper {
       $currentWeekday = $this->timeConvertHelper->getCurrentWeekday();
       $rules = EventRule::where('notification_at', '<=' , $now)
       ->where(function ($q) use ($today) {
-        $q->where('updated_at', '<', $today)
-          ->orWhere('created_at', '=', $today);
-      })->where('weekday', '=', $currentWeekday)
+          $q->whereRaw('created_at = updated_at')
+          ->orWhere('updated_at', '<', $today);
+      })
+      ->where('weekday', '=', $currentWeekday)
       ->get();
-      Log::debug($rules);
 
+      Log::debug($rules);
 
       foreach ($rules as $rule) {
         $stopId = $rule->stop;
@@ -36,6 +37,7 @@ class EventRuleCheckHelper {
         $ruleId = $rule->id;
         $objectName =  $rule->object_name;
         $tranportType = $rule->transport_type;
+        $phoneNo = $rule->owner->phone;
 
         $arivalsArray = $this->getLiveArivals($stopId, $scheduleId);
         Log::debug($arivalsArray);
@@ -43,7 +45,7 @@ class EventRuleCheckHelper {
         if ($notificationNeeded) {
           $message = $this->prepareSmsText($objectName, $tranportType, $offset);
           Log::debug($message);
-          $this->sendSMS($message);
+          $this->sendSMS($message, $phoneNo);
           $this->updateDatetimeWhenNotificationSent($ruleId);
           Log::debug('notification sent');
         } else {
@@ -91,15 +93,15 @@ class EventRuleCheckHelper {
   }
 
   protected function prepareSmsText($objectName, $tranportType, $offset){
-    $message = 'Your ' . $tranportType . ' No.' . $objectName . ' arives in ' . $offset . ' min';
+    $message = 'Your ' . $tranportType . ' No.' . $objectName . ' arrives in ' . $offset . ' min';
     return $message;
   }
 
 
-  public function sendSMS($message) {
+  public function sendSMS($message, $phoneNo) {
 
     $deviceID = 82787;
-    $number = '+37061854201';
+    $number = $phoneNo;
 
     $options = [
     // 'send_at' => strtotime('+10 minutes'), // Send the message in 10 minutes

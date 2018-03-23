@@ -184,6 +184,8 @@ function generateObjectNameInputValue(selectedDirectionIndex) {
 }
 
 function generateObjectIconUrlInputValue(selectedDirectionIndex) {
-  var iconUrl = directionsArray[selectedDirectionIndex].IconUrl;
+  var fullUrl = directionsArray[selectedDirectionIndex].IconUrl;
+  var iconUrl = fullUrl.match(/[^\/]*$/);
+  console.log(iconUrl);
   $('.iconUrl').val(iconUrl);
 }

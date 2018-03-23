@@ -42,6 +42,8 @@ class Kernel extends ConsoleKernel
       sleep(15);
       $schedule->command('event:check')->everyMinute();
       sleep(15);
+      $schedule->command('event:check')->everyMinute();
+      sleep(10);
     }
 
     /**

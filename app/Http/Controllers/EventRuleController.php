@@ -6,6 +6,8 @@ use App\EventRule;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use App\Helpers\TimeConvertHelper;
+use App\Helpers\EventRuleCheckHelper;
+use Auth;
 
 class EventRuleController extends Controller
 {
@@ -18,17 +20,23 @@ class EventRuleController extends Controller
     private $eventRuleCheckHelper;
     private $timeConvertHelper;
 
-    public function __construct(TimeConvertHelper $timeConvertHelper) {
+    public function __construct(TimeConvertHelper $timeConvertHelper, EventRuleCheckHelper $eventRuleCheckHelper) {
 
-      // $this->eventRuleCheckHelper = $eventRuleCheckHelper;
+      $this->eventRuleCheckHelper = $eventRuleCheckHelper;
       $this->timeConvertHelper = $timeConvertHelper;
+      $this->middleware('auth');
+    }
+
+    //for manual refreshing
+    public function index2()
+    {
+      $this->eventRuleCheckHelper->check();
     }
 
 
     public function index()
     {
-
-      $myRules = EventRule::all();
+      $myRules = EventRule::where('user_id', Auth::user()->id)->get();
       return view('index1')->with('myRules', $myRules);
     }
 
@@ -79,6 +87,7 @@ class EventRuleController extends Controller
         'notification_at' => $notificationAt,
         'offset' => $request->get('offset'),
         'icon_url' => $request->get('iconUrl'),
+        'user_id' => Auth::user()->id
       ];
 
       EventRule::create($post);
@@ -105,7 +114,8 @@ class EventRuleController extends Controller
      */
     public function edit($id)
     {
-        $ruleItem = EventRule::findOrFail($id);
+        $ruleItem = EventRule::where('id', '=', $id)
+        ->where('user_id', '=', Auth::user()->id)->firstOrFail();
         $rule = $ruleItem;
 
         return view('editRule', [
@@ -165,9 +175,13 @@ class EventRuleController extends Controller
      * @param  \App\EventRule  $eventRule
      * @return \Illuminate\Http\Response
      */
-    public function destroy(EventRule $eventRule)
+    public function destroy($id)
     {
-        //
+        $rule = EventRule::findOrFail($id);
+        $rule->delete();
+
+        //redirect
+        return redirect()->route('index1');
     }
 
     protected function validator($data) {

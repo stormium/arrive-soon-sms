@@ -27,7 +27,8 @@ class CreateEventRulesTable extends Migration
             $table->string('icon_url');
             $table->integer('user_id')->nullable()->unsigned();
             $table->timestamps();
-        });
+            $table->foreign('user_id')->references('id')->on('users');
+          });
     }
 
     /**

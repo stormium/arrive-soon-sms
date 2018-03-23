@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Input;
 
 Route::get('/', 'EventRuleController@index')->name('index1');
 
+Route::get('/check', 'EventRuleController@index2')->name('index2');
+
 Route::get('/proxy.php', function () {
     header('Content-type: application/json; charset=utf-8');
     $url=Input::get('url');
@@ -36,3 +38,8 @@ Route::get('/editRule/proxy.php', function () {
 Route::post('/add_rule', 'EventRuleController@store')->name('rule_store');
 Route::get('/editRule/{id}', 'EventRuleController@edit')->name('editRule');
 Route::post('/updateRule/{id}', 'EventRuleController@update')->name('updateRule');
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/removeRule/{id}', 'EventRuleController@destroy')->name('removeRule');

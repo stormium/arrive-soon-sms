@@ -41,6 +41,8 @@ var return_first = function () {
       selectWeekdayOptionWhenEdit(weekDay);
       selectOffsetOptionWhenEdit(rule.offset);
       $('.objectName').val(rule.objectName);
+      $('.iconUrl').val(rule.iconUrl);
+      console.log(rule);
       changeListener ();
 
     },

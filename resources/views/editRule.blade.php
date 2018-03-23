@@ -21,7 +21,8 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
       departureAt: "{{ $rule->departure_at }}",
       weekday: "{{ $rule->weekday }}",
       offset: "{{ $rule->offset }}",
-      objectName: "{{ $rule->object_name }}"
+      objectName: "{{ $rule->object_name }}",
+      iconUrl: "{{ $rule->icon_url }}"
     };
     // $.getScript('{{ URL::to('js/editRule.js') }}');
 </script>

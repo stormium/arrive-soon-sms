@@ -16,11 +16,17 @@ class EventRule extends Model
     'weekday',
     'notification_at',
     'offset',
-    'icon_url'
+    'icon_url',
+    'user_id'
   ];
 
   public function notifications()
   {
     return $this->hasMany('App\Notification', 'event_rule_id');
+  }
+
+  public function owner()
+  {
+    return $this->belongsTo('App\User', 'user_id');
   }
 }
