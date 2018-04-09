@@ -35,7 +35,7 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
       </div>
       <div class="w3-col s8 w3-bar">
         <span>Welcome, <strong>Guest</strong></span><br>
-        <p>Please Login</p><br>
+        <p>Please <a href=" {{ route('login') }}">Login</a> or  <a href=" {{ route('register') }}">Register</a></p><br>
       </div>
     </div>
     <hr>
@@ -85,17 +85,19 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
 
 @yield('content')
 
-</div>
-
   <!-- Footer -->
   <footer class="w3-container w3-padding-16 w3-light-grey">
-    <h4>FOOTER</h4>
+
     <div class="trafi">
       <p><a href="https://www.trafi.com">Powered by TRAFI</a></p>
       <img style="max-width:120px" src="{{ URL::to('js/59b979e35daa830001026d48_Logo.svg') }}" alt="">
 
     </div>
   </footer>
+
+</div>
+
+
 
   <!-- End page content -->
 </div>

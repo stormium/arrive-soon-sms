@@ -11,7 +11,7 @@ class EventRuleCheckHelper {
   private $timeConvertHelper;
 
   public function __construct(TimeConvertHelper $timeConvertHelper) {
-    $this->smsHelper = new SmsGatewayHelper('stormium@post.com', 'abc1234');
+    $this->smsHelper = new SmsGatewayHelper('your@email.com', 'pass321');
     $this->timeConvertHelper = $timeConvertHelper;
   }
 
@@ -56,7 +56,7 @@ class EventRuleCheckHelper {
 
   protected function getLiveArivals($stopId, $scheduleId) {
 
-    $url='http://api-ext.trafi.com/departures?api_key=4194f417c45ce354aa7994dcd6594cc7&region=vilnius';
+    $url='http://api-ext.trafi.com/departures?api_key=your_api_key&region=vilnius';
     $fullUrl=$url . "&stopId=" . $stopId;
     $json=file_get_contents($fullUrl);
     $array = json_decode($json, true);

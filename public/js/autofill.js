@@ -15,7 +15,7 @@ $( function searchStop() {
 
     source: function( request, response ) {
       $.ajax( {
-        url: 'http://api-ext.trafi.com/locations?region=vilnius&api_key=4194f417c45ce354aa7994dcd6594cc7',
+        url: 'http://api-ext.trafi.com/locations?region=vilnius&api_key=your_api_key',
         dataType: 'json',
         data: {
            q: request.term
@@ -88,7 +88,7 @@ $( function searchStop() {
 
 function getStopsOptions() {
   $.ajax( {
-    url: 'http://api-ext.trafi.com/stops/nearby?api_key=4194f417c45ce354aa7994dcd6594cc7',
+    url: 'http://api-ext.trafi.com/stops/nearby?api_key=your_api_key',
     dataType: 'json',
     data: {
        lat: stopCoords.Lat,
@@ -111,7 +111,7 @@ function getStopsOptions() {
 
 function getDirectionOptions(selectedStopId) {
   $.ajax( {
-    url: 'http://api-ext.trafi.com/departures?api_key=4194f417c45ce354aa7994dcd6594cc7',
+    url: 'http://api-ext.trafi.com/departures?api_key=your_api_key',
     dataType: 'json',
     data: {
        stop_id: selectedStopId,
